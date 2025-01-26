@@ -25,12 +25,12 @@ model Gift {
   artists    String
   mood       String
 
-  overview String
+  overview String?
 
-  lyrics String
+  lyrics String?
 
-  title      String
-  artist     String
-  songUrl    String
-  contentUrl String
+  title      String?
+  artist     String?
+  songUrl    String?
+  contentUrl String?
 }

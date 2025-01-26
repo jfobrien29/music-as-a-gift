@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 export default function Overview() {
   const router = useRouter()
   const [overview, setOverview] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchOverview = async () => {
@@ -24,13 +25,22 @@ export default function Overview() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const response = await fetch("/api/generate-lyrics", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ overview }),
-    })
-    const data = await response.json()
-    router.push(`/lyrics?id=${data.id}`)
+    setIsLoading(true)
+    try {
+      const searchParams = new URLSearchParams(window.location.search)
+      const id = searchParams.get("id")
+      const response = await fetch("/api/generate-lyrics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ overview, id }),
+      })
+      const data = await response.json()
+      router.push(`/lyrics?id=${data.id}`)
+    } catch (error) {
+      console.error("Error generating lyrics:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -43,7 +53,9 @@ export default function Overview() {
           rows={10}
           className="w-full p-2 border rounded"
         />
-        <Button type="submit">Generate Lyrics</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Generating..." : "Generate Lyrics"}
+        </Button>
       </form>
     </div>
   )

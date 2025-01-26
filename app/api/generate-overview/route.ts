@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         event: event,
         attributes: attributes,
         genres: genres,
-        favoriteArtists: favoriteArtists,
+        artists: favoriteArtists,
         mood: mood,
       },
     });

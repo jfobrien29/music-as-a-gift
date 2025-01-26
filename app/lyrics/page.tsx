@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 export default function Lyrics() {
   const router = useRouter()
   const [lyrics, setLyrics] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchLyrics = async () => {
@@ -24,13 +25,20 @@ export default function Lyrics() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const response = await fetch("/api/generate-song", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lyrics }),
-    })
-    const data = await response.json()
-    router.push(`/output?id=${data.id}`)
+    setIsLoading(true)
+    try {
+      const response = await fetch("/api/generate-song", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lyrics }),
+      })
+      const data = await response.json()
+      router.push(`/output?id=${data.id}`)
+    } catch (error) {
+      console.error("Error generating song:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -43,7 +51,9 @@ export default function Lyrics() {
           rows={20}
           className="w-full p-2 border rounded"
         />
-        <Button type="submit">Generate Song</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Generating..." : "Generate Song"}
+        </Button>
       </form>
     </div>
   )
