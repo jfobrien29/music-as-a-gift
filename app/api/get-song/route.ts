@@ -5,9 +5,14 @@ export async function GET(req: Request) {
   const id = searchParams.get("id")
 
   // In a real application, you'd fetch this from a database
-  const title = "Generated Song"
-  const audioUrl = "https://example.com/placeholder-audio.mp3"
+  // For now, returning mock data
+  const mockGiftData = {
+    title: "Your Special Song",
+    audioUrl: "https://example.com/placeholder-audio.mp3",
+    message: "I made this song just for you, hoping it brings a smile to your face!",
+    recipientName: "Friend"
+  }
 
-  return NextResponse.json({ title, audioUrl })
+  return NextResponse.json(mockGiftData)
 }
 
