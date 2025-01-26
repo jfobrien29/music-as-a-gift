@@ -17,6 +17,7 @@ model Gift {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  status    String   @default("created")
 
   name       String
   event      String
@@ -27,10 +28,10 @@ model Gift {
 
   overview String?
 
-  lyrics String?
+  title        String?
+  lyrics       String?
+  musicDetails String?
 
-  title      String?
-  artist     String?
   songUrl    String?
   contentUrl String?
 }

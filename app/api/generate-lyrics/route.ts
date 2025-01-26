@@ -1,3 +1,4 @@
+import { GiftStatus } from "@/lib/status";
 import { NextResponse } from "next/server"
 import OpenAI from "openai"
 const { PrismaClient } = require('@prisma/client');
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
     The lyrics should be creative, emotionally resonant, and match the style described in the overview.`
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o",
     messages: [{ role: "user", content: prompt }],
   })
 
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
   // save this in prisma
   await prisma.gift.update({
     where: { id },
-    data: { lyrics: lyrics },
+    data: { lyrics: lyrics, status: GiftStatus.OVERVIEW_APPROVED },
   });
 
   return NextResponse.json({ id, lyrics })

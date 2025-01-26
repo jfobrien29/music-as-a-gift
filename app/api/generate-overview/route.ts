@@ -1,3 +1,4 @@
+import { GiftStatus } from "@/lib/status";
 import { NextResponse } from "next/server"
 import OpenAI from "openai"
 const { PrismaClient } = require('@prisma/client');
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
         genres: genres,
         artists: favoriteArtists,
         mood: mood,
+        status: GiftStatus.CREATED,
       },
     });
 
@@ -40,7 +42,7 @@ export async function POST(req: Request) {
       The overview should include the song's theme, style, and emotional impact.`
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
       messages: [{ role: "user", content: prompt }],
     })
 

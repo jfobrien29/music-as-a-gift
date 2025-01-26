@@ -1,22 +1,51 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
-import type { Gift } from "./types"
 import { uploadSong } from "./utils"
+import { GiftStatus } from "@/lib/status"
 
-const initialGifts: Gift[] = [
-  { id: 1, title: "Birthday Surprise", message: "Happy Birthday!", musicType: "Pop", status: "Pending" },
-  { id: 2, title: "Anniversary Celebration", message: "Happy Anniversary!", musicType: "Jazz", status: "Completed" },
-  { id: 3, title: "Graduation Gift", message: "Congratulations!", musicType: "Classical", status: "Pending" },
-]
+interface Gift {
+  id: string
+  title: string | null
+  lyrics: string | null
+  musicDetails: string | null
+  status: string
+  songUrl?: string
+  createdAt: string
+}
 
 export default function AdminGiftsPage() {
-  const [gifts, setGifts] = useState<Gift[]>(initialGifts)
+  const [gifts, setGifts] = useState<Gift[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const { toast } = useToast()
+
+  useEffect(() => {
+    const fetchGifts = async () => {
+      try {
+        const response = await fetch('/api/get-admin-gifts')
+        if (!response.ok) {
+          throw new Error('Failed to fetch gifts')
+        }
+        const data = await response.json()
+        setGifts(data)
+      } catch (error) {
+        console.error('Error fetching gifts:', error)
+        toast({
+          title: "Error",
+          description: "Failed to load gifts. Please try again.",
+          variant: "destructive",
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchGifts()
+  }, [toast])
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -28,10 +57,10 @@ export default function AdminGiftsPage() {
     setTimeout(() => setCopiedText(null), 2000)
   }
 
-  const handleUpload = async (id: number, file: File) => {
+  const handleUpload = async (id: string, file: File) => {
     try {
       const url = await uploadSong(file)
-      setGifts(gifts.map((gift) => (gift.id === id ? { ...gift, status: "Completed", songUrl: url } : gift)))
+      setGifts(gifts.map((gift) => (gift.id === id ? { ...gift, status: GiftStatus.COMPLETED, songUrl: url } : gift)))
       toast({
         title: "Upload successful",
         description: "The song has been uploaded successfully.",
@@ -45,6 +74,18 @@ export default function AdminGiftsPage() {
     }
   }
 
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-10">
+        <h1 className="text-2xl font-bold mb-5">Admin Gift Management</h1>
+        <div className="animate-pulse space-y-4">
+          <div className="h-10 bg-gray-200 rounded w-full"></div>
+          <div className="h-32 bg-gray-200 rounded w-full"></div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-2xl font-bold mb-5">Admin Gift Management</h1>
@@ -52,8 +93,8 @@ export default function AdminGiftsPage() {
         <TableHeader>
           <TableRow>
             <TableHead>Title</TableHead>
-            <TableHead>Message</TableHead>
-            <TableHead>Music Type</TableHead>
+            <TableHead>Lyrics</TableHead>
+            <TableHead>Music Details</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -62,22 +103,22 @@ export default function AdminGiftsPage() {
           {gifts.map((gift) => (
             <TableRow key={gift.id}>
               <TableCell className="font-medium">
-                <CopyableText text={gift.title} onCopy={handleCopy} />
+                <CopyableText text={gift.title || ''} onCopy={handleCopy} />
                 {copiedText === gift.title && <span className="ml-2 text-sm text-green-600">Copied!</span>}
               </TableCell>
-              <TableCell>
-                <CopyableText text={gift.message} onCopy={handleCopy} />
-                {copiedText === gift.message && <span className="ml-2 text-sm text-green-600">Copied!</span>}
+              <TableCell className="max-w-md">
+                <CopyableText text={gift.lyrics || ''} onCopy={handleCopy} />
+                {copiedText === gift.lyrics && <span className="ml-2 text-sm text-green-600">Copied!</span>}
               </TableCell>
-              <TableCell>
-                <CopyableText text={gift.musicType} onCopy={handleCopy} />
-                {copiedText === gift.musicType && <span className="ml-2 text-sm text-green-600">Copied!</span>}
+              <TableCell className="max-w-md">
+                <CopyableText text={gift.musicDetails || ''} onCopy={handleCopy} />
+                {copiedText === gift.musicDetails && <span className="ml-2 text-sm text-green-600">Copied!</span>}
               </TableCell>
               <TableCell>{gift.status}</TableCell>
               <TableCell>
                 <FileUploadButton
                   onUpload={(file) => handleUpload(gift.id, file)}
-                  disabled={gift.status === "Completed"}
+                  disabled={gift.status === GiftStatus.COMPLETED}
                 />
               </TableCell>
             </TableRow>
@@ -96,11 +137,12 @@ interface CopyableTextProps {
 function CopyableText({ text, onCopy }: CopyableTextProps) {
   return (
     <button
-      className="text-left hover:bg-gray-100 p-1 rounded transition-colors"
+      className="text-left hover:bg-gray-100 p-1 rounded transition-colors w-full line-clamp-2"
       onClick={() => onCopy(text)}
       aria-label={`Copy text: ${text}`}
+      title={text}
     >
-      {text}
+      {text || 'Not set'}
     </button>
   )
 }

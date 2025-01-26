@@ -27,10 +27,12 @@ export default function Lyrics() {
     e.preventDefault()
     setIsLoading(true)
     try {
+      const searchParams = new URLSearchParams(window.location.search)
+      const id = searchParams.get("id")
       const response = await fetch("/api/generate-song", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lyrics }),
+        body: JSON.stringify({ lyrics, id: id }),
       })
       const data = await response.json()
       router.push(`/output?id=${data.id}`)
