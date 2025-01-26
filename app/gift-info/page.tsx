@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { v4 as uuid } from 'uuid';
+
 
 export default function GiftInfo() {
   const router = useRouter()
@@ -37,6 +39,9 @@ export default function GiftInfo() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
+
+      console.log(response)
+      
       const data = await response.json()
       router.push(`/overview?id=${data.id}`)
     } catch (error) {
@@ -50,12 +55,14 @@ export default function GiftInfo() {
   return (
     <div className="container mx-auto max-w-2xl mt-10">
       <h1 className="text-3xl font-bold mb-6">Gift Information</h1>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label htmlFor="recipientName">Recipient's Name</Label>
           <Input
             id="recipientName"
             name="recipientName"
+            placeholder="Amanda"
             value={formData.recipientName}
             onChange={handleChange}
             required
@@ -63,21 +70,22 @@ export default function GiftInfo() {
         </div>
         <div>
           <Label htmlFor="event">Event</Label>
-          <Input id="event" name="event" value={formData.event} onChange={handleChange} required />
+          <Input id="event" name="event" placeholder="Birthday, Valentine's Day, Baby Shower, etc." value={formData.event} onChange={handleChange} required />
         </div>
         <div>
           <Label htmlFor="attributes">Attributes</Label>
-          <Textarea id="attributes" name="attributes" value={formData.attributes} onChange={handleChange} required />
+          <Textarea id="attributes" name="attributes" placeholder="Describe the recipient's personality, interests, or anything else you want to include" value={formData.attributes} onChange={handleChange} required />
         </div>
         <div>
           <Label htmlFor="genres">Genres</Label>
-          <Input id="genres" name="genres" value={formData.genres} onChange={handleChange} required />
+          <Input id="genres" name="genres" placeholder="Trance, House, KPop, Rock, Country, etc." value={formData.genres} onChange={handleChange} required />
         </div>
         <div>
           <Label htmlFor="favoriteArtists">Favorite Artists</Label>
           <Input
             id="favoriteArtists"
             name="favoriteArtists"
+            placeholder="Ariana Grande, Drake, The Weeknd, etc."
             value={formData.favoriteArtists}
             onChange={handleChange}
             required
@@ -85,7 +93,7 @@ export default function GiftInfo() {
         </div>
         <div>
           <Label htmlFor="mood">Mood/Vibe</Label>
-          <Input id="mood" name="mood" value={formData.mood} onChange={handleChange} required />
+          <Input id="mood" name="mood" placeholder="Happy, Sad, Romantic, etc." value={formData.mood} onChange={handleChange} required />
         </div>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <Button type="submit" disabled={isLoading}>
