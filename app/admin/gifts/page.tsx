@@ -8,6 +8,9 @@ import { uploadSong } from "./utils"
 import { GiftStatus } from "@/lib/status"
 import { Input } from "@/components/ui/input"
 
+// Prevent caching for this admin page
+export const dynamic = 'force-dynamic'
+
 interface Gift {
   id: string
   title: string | null
@@ -27,7 +30,13 @@ export default function AdminGiftsPage() {
   useEffect(() => {
     const fetchGifts = async () => {
       try {
-        const response = await fetch('/api/get-admin-gifts')
+        const response = await fetch('/api/get-admin-gifts', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        })
         if (!response.ok) {
           throw new Error('Failed to fetch gifts')
         }
