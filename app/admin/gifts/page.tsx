@@ -60,12 +60,31 @@ export default function AdminGiftsPage() {
   const handleUpload = async (id: string, file: File) => {
     try {
       const url = await uploadSong(file)
-      setGifts(gifts.map((gift) => (gift.id === id ? { ...gift, status: GiftStatus.COMPLETED, songUrl: url } : gift)))
+      
+      const response = await fetch('/api/update-gift-song', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          giftId: id,
+          songUrl: url,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update gift')
+      }
+
+      const updatedGift = await response.json()
+      setGifts(gifts.map((gift) => (gift.id === id ? updatedGift : gift)))
+      
       toast({
         title: "Upload successful",
         description: "The song has been uploaded successfully.",
       })
     } catch (error) {
+      console.error('Upload error:', error)
       toast({
         title: "Upload failed",
         description: "There was an error uploading the song. Please try again.",
@@ -153,26 +172,33 @@ interface FileUploadButtonProps {
 }
 
 function FileUploadButton({ onUpload, disabled }: FileUploadButtonProps) {
+  const inputId = `fileInput-${disabled ? 'disabled' : 'enabled'}`
+  
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       onUpload(file)
+      // Reset the input value so the same file can be uploaded again if needed
+      event.target.value = ''
     }
   }
 
   return (
-    <div>
+    <div className="relative">
       <input
         type="file"
-        accept=".mp3"
+        accept="audio/mpeg,audio/mp3"
         onChange={handleFileChange}
-        style={{ display: "none" }}
-        id={`fileInput-${Math.random()}`}
+        className="hidden"
+        id={inputId}
         disabled={disabled}
       />
-      <label htmlFor={`fileInput-${Math.random()}`}>
-        <Button variant="outline" disabled={disabled}>
-          Upload Song
+      <label
+        htmlFor={inputId}
+        className={`cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      >
+        <Button variant="outline" disabled={disabled} asChild>
+          <span>Upload Song</span>
         </Button>
       </label>
     </div>
