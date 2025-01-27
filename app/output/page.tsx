@@ -41,8 +41,22 @@ export default function Output() {
         }
       }
     }
+
     fetchGiftData()
-  }, [toast])
+
+    // Set up polling if gift is not completed
+    let interval: NodeJS.Timeout | null = null;
+    if (giftData && giftData.status !== GiftStatus.COMPLETED) {
+      interval = setInterval(fetchGiftData, 5000); // Check every 5 seconds
+    }
+
+    // Cleanup interval on unmount or when status changes to completed
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [toast, giftData?.status]) // Added giftData.status as dependency
 
   if (isLoading) {
     return (

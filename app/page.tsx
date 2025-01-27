@@ -40,25 +40,57 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05),transparent)] pointer-events-none" />
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50 via-white to-white" />
+        <div className="absolute inset-0 bg-[url('/music-pattern.svg')] opacity-5" />
+        <div className="absolute inset-0 animate-float">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-indigo-500 opacity-20"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `float ${5 + Math.random() * 5}s linear infinite`,
+                fontSize: `${20 + Math.random() * 30}px`,
+              }}
+            >
+              ♪
+            </div>
+          ))}
+        </div>
         <div className="relative px-6 lg:px-8 max-w-[1400px] mx-auto w-full">
           <div className="text-center space-y-10 max-w-3xl mx-auto">
-            <h1 className="text-6xl sm:text-7xl font-bold text-gray-900 tracking-tight leading-[1.1]">
-              Give the Gift of <span className="text-indigo-600">Music</span>
-            </h1>
-            <p className="text-xl sm:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <div className="animate-fade-in-up">
+              <h1 className="text-6xl sm:text-7xl font-bold text-gray-900 tracking-tight leading-[1.1]">
+                Give the Gift of{" "}
+                <span className="text-indigo-600 relative">
+                  Music
+                  <span className="absolute bottom-0 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
+                </span>
+              </h1>
+            </div>
+            <p className="text-xl sm:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
               Create unforgettable moments with personalized musical gifts for every special occasion
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-6">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-6 animate-fade-in-up animation-delay-300">
               <Link href="/gift-info" className="w-full sm:w-auto">
-                <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white px-12 py-7 text-lg rounded-full w-full sm:w-auto shadow-md hover:shadow-xl transition-all duration-200">
-                  Start Gifting
+                <Button 
+                  size="lg" 
+                  className="relative bg-indigo-600 hover:bg-indigo-700 text-white px-14 py-8 text-xl rounded-full w-full sm:w-auto shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group"
+                >
+                  <span className="relative z-10">Start Gifting Now</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-300">
+                    →
+                  </div>
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-2 border-gray-200 text-gray-700 hover:bg-gray-50 px-12 py-7 text-lg rounded-full w-full sm:w-auto">
-                How It Works
-              </Button>
+            </div>
+            <div className="mt-6 animate-fade-in-up animation-delay-400">
+              <span className="inline-block bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-800 px-8 py-3 rounded-full text-lg font-medium shadow-sm">
+                🎵 Only $6.99 per gifted song! 🎵
+              </span>
             </div>
           </div>
         </div>
@@ -68,17 +100,21 @@ export default function Home() {
       <section className="py-32 px-6 bg-white">
         <div className="max-w-[1400px] mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">Why Choose Us?</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 relative inline-block">
+              Why Choose Us?
+              <span className="absolute bottom-0 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
+            </h2>
             <p className="text-xl text-gray-600 leading-relaxed">Everything you need to create the perfect musical gift</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            {features.map((feature) => (
+            {features.map((feature, index) => (
               <div
                 key={feature.title}
-                className="bg-white rounded-2xl p-10 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.07)] transition-all duration-300 group"
+                className="bg-white rounded-2xl p-10 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.07)] transition-all duration-300 group hover:-translate-y-2"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">{feature.icon}</div>
+                <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300 group-hover:rotate-12">{feature.icon}</div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-4">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>
               </div>
@@ -88,20 +124,25 @@ export default function Home() {
       </section>
 
       {/* Occasions Section */}
-      <section className="py-32 px-6 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-[1400px] mx-auto">
+      <section className="py-32 px-6 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/music-pattern.svg')] opacity-5" />
+        <div className="max-w-[1400px] mx-auto relative">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">Perfect for Every Occasion</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 relative inline-block">
+              Perfect for Every Occasion
+              <span className="absolute bottom-0 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
+            </h2>
             <p className="text-xl text-gray-600 leading-relaxed">Find the right musical gift for any moment</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {occasions.map((occasion) => (
+            {occasions.map((occasion, index) => (
               <div
                 key={occasion.name}
-                className="bg-white rounded-2xl p-10 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.07)] transition-all duration-300 group"
+                className="bg-white rounded-2xl p-10 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.07)] transition-all duration-300 group hover:-translate-y-2"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">{occasion.icon}</div>
+                <div className="text-6xl mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">{occasion.icon}</div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-4">{occasion.name}</h3>
                 <p className="text-gray-600 leading-relaxed">{occasion.description}</p>
               </div>
@@ -111,18 +152,30 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 px-6 bg-indigo-50">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-32 px-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/music-pattern.svg')] opacity-5" />
+        <div className="max-w-4xl mx-auto text-center relative">
           <div className="space-y-10">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
-              Ready to Share the <span className="text-indigo-600">Gift of Music</span>?
+            <h2 className="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight">
+              Ready to Share the{" "}
+              <span className="text-indigo-600 relative inline-block">
+                Gift of Music?
+                <span className="absolute bottom-0 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
+              </span>
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
               Start creating your personalized musical gift today and make someone's day special
             </p>
-            <Link href="/gift-info" className="inline-block">
-              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white px-12 py-7 text-lg rounded-full shadow-md hover:shadow-xl transition-all duration-200">
-                Create Your Gift Now
+            <Link href="/gift-info" className="inline-block animate-bounce">
+              <Button 
+                size="lg" 
+                className="relative bg-indigo-600 hover:bg-indigo-700 text-white px-14 py-8 text-xl rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden group"
+              >
+                <span className="relative z-10">Create Your Gift Now</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-300">
+                  →
+                </div>
               </Button>
             </Link>
           </div>

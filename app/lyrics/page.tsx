@@ -77,7 +77,7 @@ export default function Lyrics() {
             value={musicDetails}
             onChange={(e) => setMusicDetails(e.target.value)}
             placeholder="Describe the style of music (genre, mood, tempo, etc.)"
-            rows={3}
+            rows={5}
             className="w-full"
           />
         </div>
