@@ -129,3 +129,12 @@ body {
 .animation-delay-400 {
   animation-delay: 400ms;
 }
+
+@keyframes rotate-around {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

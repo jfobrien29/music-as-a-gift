@@ -42,9 +42,40 @@ export default function Home() {
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50 via-white to-white" />
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/90 via-white/90 to-white/90" />
         <div className="absolute inset-0 bg-[url('/music-pattern.svg')] opacity-5" />
-        <div className="absolute inset-0 animate-float">
+        {/* Rotating Circle of Images */}
+        <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 0 }}>
+          <div className="relative w-[600px] h-[600px] animate-[rotate-around_30s_linear_infinite]">
+            {[...Array(9)].map((_, i) => {
+              const angle = (i * (360 / 9)) * (Math.PI / 180);
+              const radius = 250;
+              const x = Math.cos(angle) * radius;
+              const y = Math.sin(angle) * radius;
+              
+              return (
+                <div
+                  key={i}
+                  className="absolute w-32 h-32 rounded-full overflow-hidden opacity-40 hover:opacity-80 transition-opacity duration-300 shadow-lg"
+                  style={{
+                    left: `calc(50% + ${x}px)`,
+                    top: `calc(50% + ${y}px)`,
+                    transform: 'translate(-50%, -50%) rotate(calc(360deg - var(--rotation)))',
+                    '--rotation': `${(i * (360 / 9))}deg`,
+                  } as any}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/hugs/${i + 1}.jpeg`}
+                    alt={`Hug ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="absolute inset-0 animate-float" style={{ zIndex: 1 }}>
           {[...Array(20)].map((_, i) => (
             <div
               key={i}
@@ -60,7 +91,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="relative px-6 lg:px-8 max-w-[1400px] mx-auto w-full">
+        <div className="relative px-6 lg:px-8 max-w-[1400px] mx-auto w-full" style={{ zIndex: 2 }}>
           <div className="text-center space-y-10 max-w-3xl mx-auto">
             <div className="animate-fade-in-up">
               <h1 className="text-6xl sm:text-7xl font-bold text-gray-900 tracking-tight leading-[1.1]">
