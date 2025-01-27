@@ -15,6 +15,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Gift not found" }, { status: 404 })
   }
 
-  return NextResponse.json({ lyrics: gift.lyrics })
+  return NextResponse.json({ lyrics: gift.lyrics, title: gift.title, musicDetails: gift.musicDetails })
 }
 

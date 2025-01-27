@@ -12,7 +12,7 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { recipientName, event, attributes, genres, favoriteArtists, mood } = body
+    const { recipientName, event, attributes, genres, favoriteArtists, mood, senderName } = body
 
     if (!recipientName || !event || !attributes || !genres || !favoriteArtists || !mood) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 })
@@ -28,6 +28,7 @@ export async function POST(req: Request) {
         artists: favoriteArtists,
         mood: mood,
         status: GiftStatus.CREATED,
+        senderName: senderName,
       },
     });
 
@@ -39,7 +40,24 @@ export async function POST(req: Request) {
       Favorite Artists: ${favoriteArtists}
       Mood/Vibe: ${mood}
 
-      The overview should include the song's theme, style, and emotional impact.`
+      Include three important details about the song:
+      - A title for the song
+      - A two sentence description of the song
+      - The style of music and the emotions we should feel
+      
+      This should be brief, clear, and editable by the user if they want to make changes. Eventually, this description will be used to create the lyrics for a song.
+      
+      Output should be in Markdown format.
+      
+      # Title
+      ....
+      
+      # Description
+      ....
+      
+      # Style
+      ....
+      `
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",

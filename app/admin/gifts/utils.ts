@@ -36,6 +36,8 @@ export async function uploadSong(file: File): Promise<string> {
       .from('songs')
       .getPublicUrl(fileName)
 
+    console.log(publicUrl)
+
     console.log('Generated public URL:', publicUrl)
     return publicUrl
   } catch (error) {

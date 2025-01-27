@@ -18,6 +18,7 @@ export default function GiftInfo() {
     genres: "",
     favoriteArtists: "",
     mood: "",
+    senderName: "",
   })
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -54,7 +55,14 @@ export default function GiftInfo() {
 
   return (
     <div className="container mx-auto max-w-2xl mt-10">
-      <h1 className="text-3xl font-bold mb-6">Gift Information</h1>
+      <h1 className="text-3xl font-bold mb-6">Step 1: Gift and Recipient Information</h1>
+      
+      <div className="p-6 mb-8 border rounded-lg bg-muted">
+        <h2 className="text-lg font-semibold mb-2">Gift Information</h2>
+        <p className="text-sm text-muted-foreground">
+          We'll use this information to generate a personalized song for your recipient.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -94,6 +102,17 @@ export default function GiftInfo() {
         <div>
           <Label htmlFor="mood">Mood/Vibe</Label>
           <Input id="mood" name="mood" placeholder="Happy, Sad, Romantic, etc." value={formData.mood} onChange={handleChange} required />
+        </div>
+        <div>
+          <Label htmlFor="senderName">Your Name (The sender of the gift)</Label>
+          <Input
+            id="senderName"
+            name="senderName"
+            placeholder="Your name"
+            value={formData.senderName}
+            onChange={handleChange}
+            required
+          />
         </div>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <Button type="submit" disabled={isLoading}>

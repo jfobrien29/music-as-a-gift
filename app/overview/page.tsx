@@ -45,16 +45,22 @@ export default function Overview() {
 
   return (
     <div className="container mx-auto max-w-2xl mt-10">
-      <h1 className="text-3xl font-bold mb-6">Song Overview</h1>
+      <h1 className="text-3xl font-bold mb-6">Step 2: Your Song Plan</h1>
+      <div className="p-6 mb-8 border rounded-lg bg-muted">
+        <h2 className="text-lg font-semibold mb-2">Review Plan</h2>
+        <p className="text-sm text-muted-foreground">
+          We've generated a brief plan for your personalized song. Review the overview below and feel free to make any changes before we create the lyrics and detailed musical description. Once you're happy with the plan, click "Looks Good" to continue.
+        </p>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <Textarea
           value={overview}
           onChange={(e) => setOverview(e.target.value)}
-          rows={10}
+          rows={16}
           className="w-full p-2 border rounded"
         />
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Generating..." : "Generate Lyrics"}
+          {isLoading ? "Generating Lyrics..." : "Looks Good"}
         </Button>
       </form>
     </div>

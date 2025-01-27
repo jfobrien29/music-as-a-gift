@@ -6,14 +6,14 @@ const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
   const body = await req.json()
-  const { id, lyrics } = body;
+  const { id, lyrics, title, musicDetails } = body;
 
   // update the status of the gift in prisma
   await prisma.gift.update({
     where: { id },
-    data: { status: GiftStatus.PENDING_SONG_CREATION, lyrics },
+    data: { status: GiftStatus.PENDING_SONG_CREATION, lyrics, title, musicDetails },
   });
 
-  return NextResponse.json({ id: body.id, title: "Generated Song", audioUrl: "https://example.com/song.mp3" })
+  return NextResponse.json({ id: body.id })
 }
 

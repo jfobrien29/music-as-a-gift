@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { uploadSong } from "./utils"
 import { GiftStatus } from "@/lib/status"
+import { Input } from "@/components/ui/input"
 
 interface Gift {
   id: string
@@ -57,10 +58,8 @@ export default function AdminGiftsPage() {
     setTimeout(() => setCopiedText(null), 2000)
   }
 
-  const handleUpload = async (id: string, file: File) => {
+  const handleUpload = async (id: string, url: string) => {
     try {
-      const url = await uploadSong(file)
-      
       const response = await fetch('/api/update-gift-song', {
         method: 'POST',
         headers: {
@@ -80,14 +79,14 @@ export default function AdminGiftsPage() {
       setGifts(gifts.map((gift) => (gift.id === id ? updatedGift : gift)))
       
       toast({
-        title: "Upload successful",
-        description: "The song has been uploaded successfully.",
+        title: "Update successful",
+        description: "The song URL has been saved successfully.",
       })
     } catch (error) {
-      console.error('Upload error:', error)
+      console.error('Update error:', error)
       toast({
-        title: "Upload failed",
-        description: "There was an error uploading the song. Please try again.",
+        title: "Update failed",
+        description: "Failed to save the song URL. Please try again.",
         variant: "destructive",
       })
     }
@@ -135,9 +134,8 @@ export default function AdminGiftsPage() {
               </TableCell>
               <TableCell>{gift.status}</TableCell>
               <TableCell>
-                <FileUploadButton
-                  onUpload={(file) => handleUpload(gift.id, file)}
-                  disabled={gift.status === GiftStatus.COMPLETED}
+                <SongUrlInput
+                  onSubmit={(url) => handleUpload(gift.id, url)}
                 />
               </TableCell>
             </TableRow>
@@ -166,42 +164,34 @@ function CopyableText({ text, onCopy }: CopyableTextProps) {
   )
 }
 
-interface FileUploadButtonProps {
-  onUpload: (file: File) => void
-  disabled?: boolean
+interface SongUrlInputProps {
+  onSubmit: (url: string) => void
 }
 
-function FileUploadButton({ onUpload, disabled }: FileUploadButtonProps) {
-  const inputId = `fileInput-${disabled ? 'disabled' : 'enabled'}`
-  
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      onUpload(file)
-      // Reset the input value so the same file can be uploaded again if needed
-      event.target.value = ''
+function SongUrlInput({ onSubmit }: SongUrlInputProps) {
+  const [url, setUrl] = useState("")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (url.trim()) {
+      onSubmit(url.trim())
+      setUrl("")
     }
   }
 
   return (
-    <div className="relative">
-      <input
-        type="file"
-        accept="audio/mpeg,audio/mp3"
-        onChange={handleFileChange}
-        className="hidden"
-        id={inputId}
-        disabled={disabled}
+    <form onSubmit={handleSubmit} className="flex gap-2">
+      <Input
+        type="url"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="Enter song URL"
+        className="min-w-[200px]"
       />
-      <label
-        htmlFor={inputId}
-        className={`cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-      >
-        <Button variant="outline" disabled={disabled} asChild>
-          <span>Upload Song</span>
-        </Button>
-      </label>
-    </div>
+      <Button type="submit" variant="outline" disabled={!url.trim()}>
+        Save
+      </Button>
+    </form>
   )
 }
 

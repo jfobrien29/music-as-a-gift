@@ -8,6 +8,9 @@ export async function POST(request: Request) {
   try {
     const { giftId, songUrl } = await request.json()
 
+    console.log('Gift ID:', giftId)
+    console.log('Song URL:', songUrl)
+
     const updatedGift = await prisma.gift.update({
       where: { id: giftId },
       data: {
