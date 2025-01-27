@@ -12,6 +12,7 @@ export default function Home() {
     { name: "Baby Shower", icon: "👶", description: "Welcome the little one with joy" },
     { name: "Get Well Soon", icon: "🌟", description: "Send comfort and healing vibes" },
     { name: "Breakup", icon: "💔", description: "Help them through tough times" },
+    { name: "Anniversary", icon: "💍", description: "Celebrate their perfect harmony" },
   ]
 
   const features = [
