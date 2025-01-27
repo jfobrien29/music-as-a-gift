@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
   const { title, lyrics, musicDetails } = json;
 
-  // save this in prisma
+  // save this in prisma!
   await prisma.gift.update({
     where: { id },
     data: { lyrics, title, musicDetails, status: GiftStatus.OVERVIEW_APPROVED },
