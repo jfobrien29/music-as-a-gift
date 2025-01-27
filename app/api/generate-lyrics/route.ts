@@ -48,8 +48,7 @@ export async function POST(req: Request) {
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
   })
-
-  console.log(completion.choices[0].message.content)
+  
 
   const json = JSON.parse(completion.choices[0].message.content || '{}')
 
