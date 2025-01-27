@@ -130,6 +130,15 @@ body {
   animation-delay: 400ms;
 }
 
+@keyframes scroll-left {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 @keyframes rotate-around {
   from {
     transform: rotate(0deg);
