@@ -41,13 +41,13 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/90 via-white/90 to-white/90" />
         <div className="absolute inset-0 bg-[url('/music-pattern.svg')] opacity-5" />
         
         {/* Floating Music Notes */}
         <div className="absolute inset-0 animate-float" style={{ zIndex: 1 }}>
-          {[...Array(20)].map((_, i) => (
+          {[...Array(40)].map((_, i) => (
             <div
               key={i}
               className="absolute text-indigo-500 opacity-20"
@@ -64,7 +64,7 @@ export default function Home() {
         </div>
 
         <div className="relative px-6 lg:px-8 max-w-[1400px] mx-auto w-full" style={{ zIndex: 2 }}>
-          <div className="text-center space-y-10 max-w-3xl mx-auto">
+          <div className="text-center space-y-10 max-w-3xl mx-auto pb-12">
             <div className="animate-fade-in-up">
               <h1 className="text-6xl sm:text-7xl font-bold text-gray-900 tracking-tight leading-[1.1]">
                 Give the Gift of{" "}
@@ -75,7 +75,7 @@ export default function Home() {
               </h1>
             </div>
             <p className="text-xl sm:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
-              Create unforgettable moments with personalized musical gifts for every special occasion
+              Create an unforgettable gift with a personalized song for every special occasion
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-6 animate-fade-in-up animation-delay-300">
               <Link href="/gift-info" className="w-full sm:w-auto">
@@ -91,28 +91,24 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-            <div className="mt-6 animate-fade-in-up animation-delay-400">
-              <span className="inline-block bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-800 px-8 py-3 rounded-full text-lg font-medium shadow-sm">
-                🎵 Only $6.99 per gifted song! 🎵
-              </span>
-            </div>
           </div>
         </div>
 
         {/* Scrolling Images */}
         <div className="absolute left-0 right-0 h-32 overflow-hidden" style={{ bottom: "2rem" }}>
           <div className="flex gap-8 absolute whitespace-nowrap will-change-transform" style={{ 
-            animation: 'scroll-left 30s linear infinite',
+            animation: 'scroll-left 120s linear infinite',
             transform: 'translateX(0)',
             width: 'max-content',
             paddingLeft: '1rem',
+            paddingRight: '1rem'
           }}>
-            {[...Array(9)].map((_, i) => (
+            {/* First set */}
+            {[...Array(8)].map((_, i) => (
               <div
-                key={i}
+                key={`set1-${i}`}
                 className="inline-block w-32 h-32 rounded-full overflow-hidden opacity-40 hover:opacity-80 transition-opacity duration-300 shadow-lg"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/hugs/${i + 1}.jpeg`}
                   alt={`Hug ${i + 1}`}
@@ -120,13 +116,38 @@ export default function Home() {
                 />
               </div>
             ))}
-            {/* Duplicate images for seamless loop */}
-            {[...Array(9)].map((_, i) => (
+            {/* Second set */}
+            {[...Array(8)].map((_, i) => (
               <div
-                key={`duplicate-${i}`}
+                key={`set2-${i}`}
                 className="inline-block w-32 h-32 rounded-full overflow-hidden opacity-40 hover:opacity-80 transition-opacity duration-300 shadow-lg"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/hugs/${i + 1}.jpeg`}
+                  alt={`Hug ${i + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+            {/* Third set */}
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={`set3-${i}`}
+                className="inline-block w-32 h-32 rounded-full overflow-hidden opacity-40 hover:opacity-80 transition-opacity duration-300 shadow-lg"
+              >
+                <img
+                  src={`/hugs/${i + 1}.jpeg`}
+                  alt={`Hug ${i + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+            {/* Fourth set */}
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={`set4-${i}`}
+                className="inline-block w-32 h-32 rounded-full overflow-hidden opacity-40 hover:opacity-80 transition-opacity duration-300 shadow-lg"
+              >
                 <img
                   src={`/hugs/${i + 1}.jpeg`}
                   alt={`Hug ${i + 1}`}
@@ -144,7 +165,7 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 relative inline-block">
               Why Choose Us?
-              <span className="absolute bottom-0 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
+              <span className="absolute -bottom-4 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed">Everything you need to create the perfect musical gift</p>
           </div>
@@ -172,7 +193,7 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 relative inline-block">
               Perfect for Every Occasion
-              <span className="absolute bottom-0 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
+              <span className="absolute -bottom-4 left-0 w-full h-2 bg-indigo-200 transform -skew-x-12" />
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed">Find the right musical gift for any moment</p>
           </div>
